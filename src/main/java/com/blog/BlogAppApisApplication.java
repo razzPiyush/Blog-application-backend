@@ -14,7 +14,19 @@ import com.blog.config.AppConstants;
 import com.blog.entities.Role;
 import com.blog.repositories.RoleRepo;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+/*
+Project structure-
+
+1) controller layer - handles https requests and responses to that http requests
+2) service layer - controls the buisness logic (request from controller layer goes to service layer)
+3) repository layer - handles database interactions
+4) entity layer - maps java objects to tables
+5) security layer - manges authentication and authorization
+6) exceptional layer - handles application-specific and gloabl errors
+7) utlity layer - provides ultility funcionalities, eg, JWT generation
+8) Payloads - A term often used for request/response objects.
+ */
+
 
 @SpringBootApplication
 public class BlogAppApisApplication implements CommandLineRunner{
@@ -73,20 +85,6 @@ public class BlogAppApisApplication implements CommandLineRunner{
 	
 	
 }
-
-/*
-Project structure-
-
-1) controller layer - handles https requests and responses to that http requests
-2) service layer - controls the buisness logic (request from controller layer goes to service layer)
-3) repository layer - handles database interactions
-4) entity layer - maps java objects to tables
-5) security layer - manges authentication and authorization
-6) exceptional layer - handles application-specific and gloabl errors
-7) utlity layer - provides ultility funcionalities, eg, JWT generation
- */
-
-
 
 /*
 2. Workflow
@@ -216,4 +214,11 @@ Handles application-specific and global exceptions.
 - GlobalExceptionHandler: Catches exceptions and returns standardized error responses.
 - ResourceNotFoundException: Thrown when a requested resource is not found.
 
+ */
+
+
+/*
+DTOs - transfers data between layers of application (from controller to service), for APIs interaction
+Entity - Maps to Database Tables using JPA/ Hibernate annotations
+Security - Entities might contain sensitive fields (e.g., passwords). DTOs allow you to avoid exposing them.
  */

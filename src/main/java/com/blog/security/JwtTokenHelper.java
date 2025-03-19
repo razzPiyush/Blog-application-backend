@@ -21,6 +21,7 @@ public class JwtTokenHelper {
 	public static final long JWT_TOKEN_VALIDITY = 5*60*60; // in mili second
 	
 	private String secret = "jwtTokenKey";
+    // A secret key used to sign and validate the JWT token, shouldn't be hardcoded
 
 	// retrieving username from jwt token
 	public String getUserNameFromToken(String token) {
@@ -31,7 +32,8 @@ public class JwtTokenHelper {
 	public Date getExpirationDateFromToken(String token) {
 		return getClaimFromToken(token , Claims::getExpiration);
 	}
-	
+
+	// Allows retrieval of specific claims using a functional interface
 	public <T> T getClaimFromToken(String token , Function<Claims, T> claimsResolver) {
 		final Claims claims = getAllClaimsFromToken(token);
 		return claimsResolver.apply(claims);
@@ -61,7 +63,8 @@ public class JwtTokenHelper {
 	// while creating token :
 //	1) Define claims of the token like issuer, Expiration, Subject, and Id
 // 2)Sign the JWt using the HS512 algorithm and secret key.
-// 3) Acc to the JWS compact serialization 
+// 3) Acc to the JWS compact serialization
+
 	// compaction of the JWt to a URL-safe string
 	private String doGenerateToken(Map<String, Object> claims, String subject) {
 		return Jwts.builder()
@@ -81,3 +84,24 @@ public class JwtTokenHelper {
 	}
 	
 }
+
+/*
+Workflow
+
+Token Generation:
+
+- When a user logs in successfully, a token is generated using their username and returned.
+- The token contains:
+  - Username (subject).
+  - IssuedAt timestamp.
+  - Expiration timestamp.
+  - Signature to ensure integrity.
+
+Token Validation:
+
+- For every subsequent API request, the token is sent in the request (typically in the Authorization header).
+- The server:
+  - Extracts the token from the request.
+  - Validates the token using the secret key.
+  - Checks the username and expiration.
+ */
