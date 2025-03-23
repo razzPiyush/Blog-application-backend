@@ -1,0 +1,101 @@
+POST /api/auth/login -> Authenticate user and generate JWT token.
+POST /api/auth/register -> Register a new user.
+
+POST /api/users/ -> Create a new user.
+PUT /api/users/{userId} -> Update an existing user.
+DELETE /api/users/{userId} Delete a user -> (admin only).
+GET /api/users/{userId} -> Retrieve the details of a specific user.
+GET /api/users/ -> Retrieve a list of all users.
+
+POST /api/categories/ -> Create a new category.
+PUT /api/categories/{categoryId} -> Update an existing category.
+DELETE /api/categories/{categoryId} -> Delete an existing category.
+GET /api/categories/{categoryId} -> Retrieve a single category.
+GET /api/categories/ -> Retrieve all categories.
+
+POST /api/user/{userId}/category/{categoryId}/posts -> Create a new post for a user in a category.
+GET /api/user/{userId}/posts -> Retrieve all posts created by a user.
+GET /api/category/{categoryId}/posts -> Retrieve all posts in a category.
+GET /api/posts -> Retrieve all posts with optional pagination and sorting.
+GET /api/posts/{postId} -> Retrieve a single post by its ID.
+DELETE /api/posts/{postId} -> Delete a specific post.
+PUT /api/posts/{postId} -> Update the details of a specific post.
+GET /api/posts/search/{keywords} -> Search posts by title containing keywords.
+
+POST /api/post/image/upload/{postId} -> Upload an image for a post.
+GET /api/post/image/{imageName} -> Serve an image file for a post.
+
+POST /api/post/{postId}/comments -> Create a new comment for a post.
+DELETE /api/comments/{commentId} -> Delete an existing comment.
+
+User {id, name, email, password, about, set<Role>roles, List<Post>posts}
+Role {id, name}
+Category {id, title, description, List<Post>posts}
+Post {id, title, content, imageName, addedDate, category, user, set<Comment>comments}
+Comment {id, content}
+PostResponse {List<Post>posts, pageNumber, pageSize, totalPages, totalElements, lastPage}
+Entities - It represent the database objects or tables.
+Payloads - It represent the data transfer objects (DTOs) that are used for transferring data between different
+layers of the application, often in the context of API requests and responses.
+Repositories - It is part of the data access layer and is responsible for interacting with the database
+
+### Documentation: Searching, Sorting, and Pagination
+
+#### **1. Searching**
+**Endpoint:**
+`GET /posts/search/{keywords}`
+**Description:**
+Search for posts with titles containing the specified `keywords`.
+**Example Request:**
+`GET /posts/search/react`
+**Response:**
+Returns a list of posts with titles containing "react".
+
+---
+
+#### **2. Sorting**
+**Endpoint:**
+`GET /posts`
+**Description:**
+Retrieve all posts sorted by a specific field and order.
+**Query Parameters:**
+- `sortBy` (default: `"id"`): Field to sort by (e.g., `title`, `createdDate`).
+- `sortDir` (default: `"asc"`): Sort direction (`asc` or `desc`).
+**Example Request:**
+`GET /posts?sortBy=createdDate&sortDir=desc`
+**Response:**
+Returns posts sorted by creation date in descending order.
+
+---
+
+#### **3. Pagination**
+**Endpoint:**
+`GET /posts`
+**Description:**
+Retrieve paginated posts.
+**Query Parameters:**
+- `PageNumber` (default: `0`): Page index (0-based).
+- `PageSize` (default: `10`): Number of posts per page.
+**Example Request:**
+`GET /posts?PageNumber=1&PageSize=5`
+**Response:**
+Returns posts from the second page, showing 5 posts per page.
+
+---
+
+#### **Combined Features**
+**Endpoint:**
+`GET /posts` or `GET /posts/search/{keywords}`
+**Description:**
+Combine searching, sorting, and pagination for refined results.
+**Query Parameters:**
+- `PageNumber`: Page index.
+- `PageSize`: Number of posts per page.
+- `sortBy`: Field to sort by.
+- `sortDir`: Sort direction.
+**Example Request:**
+`GET /posts/search/react?PageNumber=0&PageSize=2&sortBy=createdDate&sortDir=desc`
+**Response:**
+Returns the first 2 posts with "react" in the title, sorted by creation date in descending order.
+
+
